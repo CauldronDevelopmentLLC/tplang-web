@@ -12,7 +12,7 @@ all: $(TARGETS)
 	stylus <$<>$@
 
 publish: all
-	rsync -av --exclude=*~ "$(current_dir)"/ $(DEST)
+	rsync -av --exclude=*~ --exclude .git "$(current_dir)"/ $(DEST)
 
 tidy:
 	rm -f *~

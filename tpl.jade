@@ -238,7 +238,25 @@ html
             | defaults to true.
 
         #arc.func
-          code.decl arc(x, y, z, angle, plane, incremental=true)
+          code.decl arc(x, y, z, angle, plane)
+          // Note there is a fifth parameter incremental that is not complete.
+          p
+            | <code>x</code>, <code>y</code> and <code>z</code> specify the
+            | from the current position to the far center of the helicial move
+            | in the selected plane.  If the <code>z</code> value is zero then
+            | them move is a simple arc in the selected plane, otherwise it is
+            | a true helical move with an axis of length equal to the
+            | absolute value of the <code>z</code> value either above or below
+            | the selected plane through the current control point depending
+            | on the sign.
+          p
+            | <code>angle</code> is the rotation of the arc in radians.  A
+            | positive value indicates a clockwise rotation, negative a
+            | counter-clockwise rotation.
+          p
+            | <code>plane</code> specifies to which plane the helical axis is
+            | perpendicular.  Valid values are <code>XY</code> (the default),
+            | <code>XZ</code> or <code>YZ</code>.
 
         #probe.func
           code.decl
