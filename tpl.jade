@@ -260,8 +260,7 @@ html
 
         #probe.func
           code.decl
-            | probe(x, y, z, a, b, c, u, v, w, active=true,
-            | error=true, port=0)
+            | probe(x, y, z, a, b, c, u, v, w, port=0, active=true, error=true)
           p
             | Make a linear move in the direction indicated until the probe
             | state changes to the target state.  If <code>active</code> is true
