@@ -260,22 +260,22 @@ html
 
         #probe.func
           code.decl
-            | probe(x, y, z, a, b, c, u, v, w, toward=true,
-            | error=true, index=0, port=-1, invert=false)
+            | probe(x, y, z, a, b, c, u, v, w, active=true,
+            | error=true, port=0)
           p
             | Make a linear move in the direction indicated until the probe
-            | state changes to the target state.  If <code>toward</code> is true
+            | state changes to the target state.  If <code>active</code> is true
             | the probe motion will stop on contact.  Otherwise it will stop on
             | loss of contact.
           p
             | <code>probe()</code> will return the coordinates of the position
             | at the time the probe changed state.  If the programmed point was
             | reached before the state changed then the programmed point will be
-            | returend instead.
+            | returned instead.
 
           pre: code.example
             | probe(z = -10);  // Probe towards z=-10
-            | probe(z = 10, toward = false);  // Probe away from current z
+            | probe(z = 10, active = false);  // Probe away from current z
           p
             | It is an error if:
             ul
