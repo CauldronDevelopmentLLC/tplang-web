@@ -1,0 +1,105 @@
+h2#module Module
+p Load code modules.
+
+#require.func
+  code.decl require(path)
+  p
+    | Load the specified module.  Modules are searched for in the directories
+    | specified in the <code>TPL_PATH</code> environment variable.  A TPL module
+    | may be either a file ending in <tt>.tpl</tt>, <tt>.js</tt> or
+    | <tt>.json</tt> or a directory containing a <tt>package.json</tt> file.
+
+  p
+    | <tt>.tpl</tt> or <tt>.js</tt> files are loaded as code whereas
+    | <tt>.json</tt> files are loaded as data.  Code modules must assign values
+    | to the <code>module.exports</code> (alternatively <code>exports</code>)
+    | dictionary in order for them to be accessible.  For example:
+
+  pre
+    code.example
+      | // A TPL module
+      | module.exports = {
+      |   data: [1, 2, 3],
+      | &nbsp;
+      |   hello: function () {print("Hello World!\n");}
+      | }
+
+  p
+    | If the above code were in a file called <tt>hello.tpl</tt>, you might use
+    | the following to access it:
+
+  pre
+    code.example
+      | var m = require('hello.tpl');
+      | &nbsp;
+      | m.hello();
+      | &nbsp;
+      | for (var i = 0; i < m.data.length; i++)
+      |   print(m.data[i], '\n');
+
+  p
+    | <tt>package.json</tt> files are treated specially.  The contents
+    | are interpreted as a dictionary of JSON data and the attribute
+    | <tt>main</tt> is read to get the relative path of the entry point
+    | for the module.  The specified file is then loaded as a code or data
+    | module as above.
+
+  p When a module is being loaded the following variables are defined:
+
+  table
+    tr
+      th module.name
+      td The module name.
+    tr
+      th module.id
+      td Same as <tt>module.name</tt>.
+    tr
+      th module.filename
+      td The full path to the module.
+    tr
+      th module.exports
+      td
+        | The exports dictionary.  Used to export public data and functions.
+        | Can be assigned to a new value.
+    tr
+      th exports
+      td Same as <tt>module.exports</tt> but reassignment has no effect.
+    tr
+      th id
+      td Same as <tt>module.name</tt>.
+
+  p
+    | If any modules have cyclic <tt>require()</tt> calls, module values
+    | may not be accessible at module load time.  For example:
+
+  strong a.tpl:
+  pre: code.example
+    | var b = require('b.tpl');
+    | print(b.data, '\n');
+    | module.exports = {data: 'A'}
+
+  strong b.tpl:
+  pre: code.example
+    | var a = require('a.tpl');
+    | print(a.data, '\n');
+    | module.exports = {data: 'B'}
+
+  strong main.tpl:
+  pre: code.example
+    | var a = require('a.tpl');
+    | var b = require('b.tpl');
+    | print(a.data, '\n');
+    | print(b.data, '\n');
+
+  p Running <tt>main.tpl</tt> will produce the following output:
+
+  pre: code.example
+    | undefined
+    | B
+    | A
+    | B
+
+  p
+    | The first reference to <tt>a.data</tt> is undefined because module A is
+    | not yet fully loaded when accessed in module B.  However, all data has
+    | been loaded by the time <tt>main.tpl</tt> accesses it.

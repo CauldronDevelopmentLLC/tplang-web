@@ -1,0 +1,92 @@
+// Machine State Functions
+h2#mstate Machine State
+#feed.func
+  code.decl feed(rate, mode = FEED_UNITS_PER_MIN)
+  p
+    | <code>rate</code> indicates the units per minute in the XYZ
+    | cartesian system of all subsequent non-rapid moves until the feed
+    | rate is changed.
+
+  p <code>mode</code> may be one of the following:
+    ul
+      li
+        | <code>FEED_UNITS_PER_MIN</code> - The feed rate is in units
+        | per minute.  The unit may be inches, millimeters or degrees
+        | depending on the current unit of length and which axes are
+        | moving.
+      li
+        | <code>FEED_INVERSE_TIME</code> - Indicates that moves should
+        | be completed in one divided by <code>rate</code> minutes.  For
+        | example, if <code>rate</code> is 2.0, moves should be
+        | completed in half a minute.
+      li
+        | <code>FEED_UNITS_PER_REV</code> - Means that the controlled
+        | point should move a certain number of units per revolution.
+
+    | Note, these names are case sensitive.
+  p
+    | If no arguments are given, returns the current feed rate and mode.
+
+  pre: code.example
+    | feed(4);           // Move at 4 units per minute
+    | rate = feed()[0];  // Get the current feed rate
+
+#speed.func
+  code.decl speed(rate, surface, max)
+  p
+    | <code>rate</code> indicates the revolutions per minute of the
+    | spindle.
+  p
+    | If <code>rate</code> is positive the spindle will turn in the
+    | clockwise direction.  If negative in the counterclockwise
+    | direction.
+
+  p A <code>rate</code> of zero turns the spindle off.
+  p
+    | If <code>surface</code> is specified it selects a constant surface
+    | speed of <code>surface</code> feet per minute if
+    | <code>IMPERIAL</code> units are selected or meters per minute if
+    | <code>METRIC</code> units are selected. If <code>max</code> is
+    | also specified it indicates the maximum spindle RPM.
+  p
+    | If no arguments are given, returns the current spindle speed,
+    | surface speed and maximum RPM.
+
+  pre: code.example
+    | speed(1000);    // Spin clockwise at 1K RPM.
+    | speed(-20000);  // Spin counterclockwise at 20K RPM.
+
+#tool.func
+  code.decl tool(number)
+  p Make tool <code>number</code> the current tool.
+  p If no arguments are given the current tool number is returned.
+  pre: code.example tool(1);  // Select tool 1
+
+#units.func
+  code.decl units(type)
+  p
+    | <code>type</code> may be either <code>METRIC</code> which selects
+    | millimeters as the unit of measure or <code>IMPERIAL</code>
+    | which selects inches.
+
+  p If no arguments are given the current <code>type</code> is returned.
+
+  pre: code.example units(METRIC);  // Select millimeters
+
+#pause.func
+  code.decl pause(optional=false)
+  p
+    | Pause the program until the user resumes.  If
+    | <code>optional</code> is true then only pause if the stop switch
+    | is activated.
+  pre: code.example pause(true);
+
+//
+  #getX.func
+    code.decl getX()
+
+  #getY.func
+    code.decl getY()
+
+  #getZ.func
+    code.decl getZ()

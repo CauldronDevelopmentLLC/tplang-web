@@ -1,0 +1,31 @@
+doctype html
+html
+  head
+    meta(charset='UTF-8')
+
+    title Tool Path Language
+
+    link(rel="stylesheet", href="solarized-light.css")
+    link(rel="stylesheet", href="tpl.css")
+
+  body
+    #header
+      h1 Tool Path Language
+
+    #page
+      #sidebar
+        ul
+
+      #content
+        include templates/about.jade
+        include templates/downloads.jade
+        include templates/examples.jade
+        include templates/usage.jade
+        include templates/api.jade
+        include templates/bugs.jade
+        include templates/donations.jade
+
+      - var cdn = '//cdnjs.cloudflare.com/ajax/libs'
+      script(src=cdn + "/jquery/2.1.3/jquery.min.js")
+      script(src="rainbow-custom.min.js")
+      script(src="tpl.js")

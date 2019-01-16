@@ -1,0 +1,57 @@
+h2#2dcam 2D CAM
+p Some basic CAM operations on 2D polygons.
+
+#offset.func
+  code.decl
+    | offset(polys, delta, join, limit=1000, autoFix=true, scale=1000000)
+
+  table
+    tr
+      th polys
+      td A list of polygons.  See format below.
+    tr
+      th delta
+      td The offset delta.  Positive for outset.  Negative for inset.
+    tr
+      th join
+      td
+        | Type of join.  Can be <code>JOIN_SQUARE</code>,
+        | <code>JOIN_ROUND</code> or <code>JOIN_MITER</code>.
+    tr
+      th limit
+      td Default <tt>1000</tt>.  Miter limit for <code>JOIN_MITER</code>.
+    tr
+      th autoFix
+      td
+        | Default <code>true</code>.  Automatically fix polygon orientation if
+        | necessary and remove duplicate vertices.
+    tr
+      th scale
+      td Default <tt>10,00,000</tt>.  Scale the polyon points to gain accuracy.
+
+  p
+    | Use the <a href="https://sourceforge.net/projects/polyclipping/">Clipper
+    | library</a> to compute polygon offsets.
+
+  p
+    | The <code>polys</code> argument is an array of one or more polygoyns
+    | and is formatted either as an array of arrays of dictionaries:
+
+  pre: code.example
+    | [
+    |   [{x: 0, y: 0}, {x: 1, y: 0}, . . ., {x: 0, y: 0}],
+    |   . . .
+    | ]
+
+  p or an array of arrays of 2D arrays:
+
+  pre: code.example
+    | [
+    |   [[0, 0], [1, 0], . . ., [0, 0]],
+    |   . . .
+    | ]
+
+  p
+    | Note, the results of <code>dxf.open()</code> are not directly usable by
+    | <code>offset()</code> but other functions in the <tt>dxf</tt> module
+    | can convert raw DXF data to polygons.

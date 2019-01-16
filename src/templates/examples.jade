@@ -1,0 +1,126 @@
+h1#examples An Example
+p
+  | This section aims to give you a quick and dirty introduction to TPL
+  | and some of it's features via a few simple examples.
+p
+  | TPL code is JavaScript with a library of built-in functions which
+  | allow you to generate tool paths.  It looks like this:
+pre: code.example
+  | feed(400);     // Set the feed rate to 400 millimeters per minute
+  | tool(1);       // Select tool 1
+  != '\n\n'
+  | rapid({z: 5}); // Move to a safe height of 5mm
+  | rapid({x: 1, y: 1});  // Go to start position
+  | speed(2000);   // Spin at 2000 RPM in the clockwise direction
+  != '\n\n'
+  | cut({z: -3});  // Cut down to depth
+  | cut({x: 11});  // Cut to second corner
+  | cut({y: 11});  // Cut to third corner
+  | cut({x: 1});   // Cut to forth corner
+  | cut({y: 1});   // Cut back to begining
+  != '\n\n'
+  | rapid({z: 5}); // Move back to safe position
+  | speed(0);      // Stop spinning
+
+p The CAMotics simulator shows the result:
+
+img.sim-image(src="images/square.png")
+
+p
+  | The previous example initializes the machine then cuts a square.
+  | Note, you must always set the feed rate to something other than zero
+  | before making a cut.  It's also a good idea to select a tool and
+  | set the spindle speed.  Also note thate, TPL uses metric units by
+  | default but you can switch to imperial units by calling
+  | <code>units(IMPERIAL)</code>.
+p
+  | Note, the bracket notation <code>{}</code> used above lets you
+  | specify specific arguments and leave others to their default values.
+  | The following function calls are all equivalent:
+
+pre: code.example
+  | rapid(5, 10, 15);
+  | rapid({x: 5, y: 10, z: 15});
+  | rapid({z: 15, x: 5, y: 10});
+
+p
+  | The code in the square example may be more readable than typical
+  | GCode but TPL's real power comes from its ability to use more
+  | advanced language constructs such as functions.  The above square
+  | example could be wrapped in a function like this:
+
+pre: code.example
+  | function square(size, depth, safe) {
+  |   cut({z: depth});  // Cut down to depth
+  |   icut({x: size});  // Cut to second corner
+  |   icut({y: size});  // Cut to third corner
+  |   icut({x: -size}); // Cut to forth corner
+  |   icut({y: -size}); // Cut back to begining
+  |   rapid({z: safe}); // Move back to safe position
+  | }
+  != '\n\n'
+  | feed(400);          // Set the feed rate to 400 mm per minute
+  | tool(1);            // Select tool 1
+  != '\n\n'
+  | rapid({z: 5});      // Move to a safe height of 5mm
+  | rapid({x: 1, y: 1});  // Go to start position
+  | speed(2000);        // Spin at 2000 RPM in the clockwise direction
+  != '\n\n'
+  | square(10, -3, 5);
+  != '\n\n'
+  | speed(0);           // Stop spinning
+
+p
+  | Note the <code>square()</code> function uses <code>icut()</code>
+  | the incremental version of <code>cut()</code>.
+p
+  | Given the <code>square()</code> function you can now cut repeated
+  | squares like this:
+
+pre: code.example
+  | for (i = 1; i <= 10; i++) square(i * 5, -3, 5);
+
+p
+  | Here is the result of running the <code>squares</code> function as
+  | in the for loop above.
+
+img.sim-image(src="images/squares.png")
+
+p
+  | To continue the example a bit further and show more of the power
+  | of TPL we can repeat and rotate the squares to create an interesting
+  | pattern using the following program:
+
+pre: code.example
+  | function square(size, depth, safe) {
+  |   cut({z: depth});  // Cut down to depth
+  |   icut({x: size});  // Cut to second corner
+  |   icut({y: size});  // Cut to third corner
+  |   icut({x: -size}); // Cut to forth corner
+  |   icut({y: -size}); // Cut back to begining
+  |   rapid({z: safe}); // Move back to safe position
+  | }
+  != '\n\n'
+  | function squares(count, space, depth, safe) {
+  |   for (var i = 1; i <= count; i++) {
+  |     rapid({x: -space * i, y: -space * i});
+  |     square(i * 2 * space, depth, safe);
+  |   }
+  | }
+  != '\n\n'
+  | feed(400);           // Set the feed rate to 40 mm per second
+  | tool(1);             // Select tool 1
+  != '\n\n'
+  | rapid({z: 5});       // Move to a safe height of 5mm
+  | rapid({x: 0, y: 0}); // Go to center position
+  | speed(2000);         // Spin at 2000 RPM in the clockwise direction
+  != '\n\n'
+  | for (var i = 0; i < 4; i++) {
+  |   squares(10, 5, -3, 5);
+  |   rotate(Math.PI / 8); // Rotate clockwise 15 degrees
+  | }
+  != '\n\n'
+  | speed(0); // Stop spinning
+
+p The simulator shows the final result:
+img.sim-image(src="images/star.png")

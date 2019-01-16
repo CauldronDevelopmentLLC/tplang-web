@@ -1,0 +1,89 @@
+// Machine Motion Functions
+h2#motion Tool Movement
+#rapid.func
+  code.decl rapid(x, y, z, a, b, c, u, v, w, incremental=false)
+  p
+    | Issue a linear motion at the rapid feed rate from the current
+    | position to the new position defined by the provided axes
+    | arguments.
+
+  pre: code.example
+    | rapid(0, 0, 0);          // Rapid to x=0, y=0, z=0
+    | rapid(10, 10);           // Rapid to x=10, y=10, z remains 0
+    | rapid({z: 10, y: 10});   // Rapid to y=10, z=10, x remains 10
+
+#irapid.func
+  code.decl irapid(x, y, z, a, b, c, u, v, w, incremental=true)
+
+  p
+    | The same as <code>rapid()</code> but <code>incremental</code>
+    | defaults to true.
+
+#cut.func
+  code.decl cut(x, y, z, a, b, c, u, v, w, incremental=false)
+
+  p
+    | The same as <code>rapid()</code> except moves are at the current
+    | feed rate set by a call to <code>feed()</code>.
+
+#icut.func
+  code.decl
+    | icut(x, y, z, a, b, c, u, v, w, incremental=true)
+
+  p
+    | The same as <code>cut()</code> but <code>incremental</code>
+    | defaults to true.
+
+#arc.func
+  code.decl arc(x, y, z, angle, plane)
+  // Note there is a fifth parameter incremental that is not complete.
+  p
+    | <code>x</code>, <code>y</code> and <code>z</code> specify the
+    | offset from the current position to the far center of the
+    | helicial move in the selected plane.  If the <code>z</code> value
+    | is zero then them move is a simple arc in the selected plane,
+    | otherwise it is a true helical move with an axis of length equal
+    | to the absolute value of the <code>z</code> value either above or
+    | below the selected plane through the current control point
+    | depending on the sign.
+  p
+    | <code>angle</code> is the rotation of the arc in radians.  A
+    | positive value indicates a clockwise rotation, negative a
+    | counter-clockwise rotation.
+  p
+    | <code>plane</code> specifies to which plane the helical axis is
+    | perpendicular.  Valid values are <code>XY</code> (the default),
+    | <code>XZ</code> or <code>YZ</code>.
+
+#probe.func
+  code.decl
+    | probe(x, y, z, a, b, c, u, v, w, port=0, active=true, error=true)
+  p
+    | Make a linear move in the direction indicated until the probe
+    | state changes to the target state.  If <code>active</code> is true
+    | the probe motion will stop on contact.  Otherwise it will stop on
+    | loss of contact.
+  p
+    | <code>probe()</code> will return the coordinates of the position
+    | at the time the probe changed state.  If the programmed point was
+    | reached before the state changed then the programmed point will be
+    | returned instead.
+
+  pre: code.example
+    | probe(z = -10);  // Probe towards z=-10
+    | probe(z = 10, active = false);  // Probe away from current z
+  p
+    | It is an error if:
+    ul
+      li The current point is the same as the programed point.
+      li The current feed rate is zero.
+      li The probe is already in the target state.
+
+#dwell.func
+  code.decl dwell(seconds)
+  p
+    | <code>seconds</code> indicate the time in seconds that all axes
+    | will remain unmoving.  Fractions of a second may be used.
+
+  pre: code.example
+    | dwell(0.5);  // Dwell for half a second.

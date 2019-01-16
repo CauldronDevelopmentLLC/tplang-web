@@ -1,0 +1,25 @@
+h1#usage Using TPL
+p
+  | After downloading and installing the latest CAMotics you can write
+  | a TPL program, or try out one of the examples.  TPL programs
+  | usually have the file extension <code>.tpl</code>.  You can execute
+  | a TPL program like this:
+
+pre: code.example tplang input.tpl
+
+p
+  | This will print the resulting G-code to the screen.  You can also
+  | save the output to a file like this:
+
+pre: code.example tplang input.tpl > output.gc
+
+p You can then view the results in the CAMotics simulator like this:
+
+pre: code.example camotics output.gc
+
+p
+  | You will also probably have to configure a tool table and
+  | define the workpeice (the material being cut) in order to get a
+  | correct simulation.  See
+  | <a href="http://camotics.org/">camotics.org</a>
+  | for more information on using the simulator.

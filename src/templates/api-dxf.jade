@@ -1,0 +1,74 @@
+h2#dxf DXF
+p DXF file format support.
+
+h4 Constants
+table
+  tr: th POINT
+  tr: th LINE
+  tr: th ARC
+  tr: th POLYLINE
+  tr: th SPLINE
+
+#open.func
+  code.decl open(path)
+
+  p
+    | Read a DXF file and return JSON data as a dictionary of layers.  Each
+    | layer is a list of any of the following entities:
+
+  h4 Points
+  pre: code.example
+    | {
+    |   type: dxf.POINT,
+    |   x: 0,
+    |   y: 0,
+    |   z: 0
+    | }
+
+  h4 Lines
+  pre: code.example
+    | {
+    |   type: dxf.LINE,
+    |   start: {x: 0, y: 0, z: 0},
+    |   end: {x: 1, y: 1, z: 1}
+    | }
+
+  h4 Arcs
+  pre: code.example
+    | {
+    |   type: dxf.ARC,
+    |   center: {x: 0, y: 0, z: 0},
+    |   radius: 1,
+    |   startAngle: 0,
+    |   endAngle: 2 * Math.PI,
+    |   clockwise: true
+    | }
+
+  h4 Polylines
+  pre: code.example
+    | {
+    |   type: dxf.POLYLINE,
+    |   vertices: [
+    |     {type: dxf.POINT, x: 0, y: 0, z: 0},
+    |     . . .
+    |   ]
+    | }
+
+  h4 Splines
+  pre: code.example
+    | {
+    |   type: dxf.SPLINE,
+    |   degree: 3,
+    |   ctrlPts: [
+    |     {type: dxf.POINT, x: 0, y: 0, z: 0},
+    |     . . .
+    |   ],
+    |   knots: [0, . . .]
+    | }
+
+  h4 Example
+  pre: code.example
+    | var dxf = require('dxf');
+    | var layers = dxf.open('test.dxf');
+    | &nbsp;
+    | 

@@ -1,0 +1,48 @@
+h2#output Debugging
+#print.func
+  code.decl print(...)
+  p Convert all arguments to strings and print them to the output stream.
+  p
+    | Note that print() writes to the same output stream as the gcode
+    | functions so if you don't want to interfere with the gcode
+    | output you should wrap text in parentheses <tt>()</tt> so that
+    | it is treated as a gcode comment.
+  p
+    | print() does not automatically add an end of line and does not interpret
+    | formatting strings.
+
+  pre: code.example print("Hello World!\n");
+  pre: code.example print("(A gcode comment)\n");
+
+#comment.func
+  code.decl comment(...)
+  p
+    | Convert all arguments to strings and output a <a
+    | href="http://linuxcnc.org/docs/html/gcode/overview.html#gcode:comments"
+    | >GCode comment</a>.
+  pre: code.example comment("A gcode comment");
+
+#message.func
+  code.decl message(...)
+  p
+    | Convert all arguments to strings and output a <a
+    | href="http://linuxcnc.org/docs/html/gcode/overview.html#gcode:messages"
+    | >GCode message</a>.
+  p In some contexts GCode messages are displayed to the user.
+  pre: code.example message("Hello World");
+
+#console-log.func
+  code.decl console.log(...)
+  p Print to log info stream.
+
+#console-debug.func
+  code.decl console.debug(...)
+  p Print to log debug stream.
+
+#console-warn.func
+  code.decl console.warn(...)
+  p Print to log warning stream.
+
+#console-error.func
+  code.decl console.error(...)
+  p Print to log error stream.

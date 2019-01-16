@@ -1,27 +1,41 @@
-TARGETS=tpl.html tpl.css
 DEST=root@coffland.com:/var/www/tplang.org/http/
-mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
-current_dir := $(patsubst %/,%,$(dir $(mkfile_path)))
-
 JADE=./node_modules/jade/bin/jade.js
 STYLUS=./node_modules/stylus/bin/stylus
+
+SRC=tpl.jade tpl.styl tpl.js
+STATIC=$(shell find static/ -type f)
+
+TARGETS:=$(patsubst %.jade,%.html,$(SRC))
+TARGETS:=$(patsubst %.styl,%.css,$(TARGETS))
+TARGETS:=$(patsubst %,http/%,$(TARGETS))
+TARGETS+=$(patsubst static/%,http/%,$(STATIC))
 
 all: node_modules $(TARGETS)
 
 node_modules: package.json
 	npm install
 
-%.html: %.jade
-	$(JADE) -P $<
+http/tpl.html: $(wildcard src/templates/*.jade)
 
-%.css: %.styl
+http/%.html: src/%.jade
+	@mkdir -p http
+	$(JADE) -P $< -o http
+
+http/%.css: src/%.styl
+	@mkdir -p http
 	$(STYLUS) <$<>$@
 
+http/%.js: src/%.js
+	install -D $< $@
+
+http/%: static/%
+	install -D $< $@
+
 publish: all
-	rsync -av static/* tpl.html tpl.css tpl.js $(DEST)
+	rsync -av http/* $(DEST)
 
 tidy:
-	rm -f *~
+	rm -f $(shell find . -name *~)
 
 clean: tidy
-	rm -f $(TARGETS)
+	rm -rf http
