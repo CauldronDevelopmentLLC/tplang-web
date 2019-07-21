@@ -4,7 +4,7 @@ h2#mstate Machine State
   code.decl feed(rate, mode = FEED_UNITS_PER_MIN)
   p
     | <code>rate</code> indicates the units per minute in the XYZ
-    | cartesian system of all subsequent non-rapid moves until the feed
+    | Cartesian system of all subsequent non-rapid moves until the feed
     | rate is changed.
 
   p <code>mode</code> may be one of the following:
@@ -59,8 +59,34 @@ h2#mstate Machine State
 #tool.func
   code.decl tool(number)
   p Make tool <code>number</code> the current tool.
-  p If no arguments are given the current tool number is returned.
+
   pre: code.example tool(1);  // Select tool 1
+
+  p
+    | If no arguments are given, information about the currently selected tool
+    | is returned.  E.g.:
+
+  pre: code.example
+    | {
+    |    number: 1,
+    |    shape: CONICAL,        // A tool type constant
+    |    angle: Math.PI * 0.5,  // In radians, 90°
+    |    length: 10,            // In current units
+    |    diameter: 3.175,       // In current units
+    |    snub_diameter: 1       // If shape == SNUBNOSE
+    | }
+
+  p For example, to get the current tool radius:
+
+  pre: code.example var tool_radius = tool().diameter / 2;
+
+  p The tool type constants are as follows:
+  ul
+    li: code CYLINDRICAL
+    li: code CONICAL
+    li: code BALLNOSE
+    li: code SPHEROID
+    li: code SNUBNOSE
 
 #units.func
   code.decl units(type)
@@ -81,12 +107,12 @@ h2#mstate Machine State
     | is activated.
   pre: code.example pause(true);
 
-//
-  #getX.func
-    code.decl getX()
+#workpiece.func
+  code.decl workpiece()
+  p Get current simulation's workpiece offset and dimensions.
 
-  #getY.func
-    code.decl getY()
-
-  #getZ.func
-    code.decl getZ()
+  pre: code.example
+    | workpiece() = {
+    |   dims: {x: 100, y: 100, z: 10},
+    |   offset: {x: -50, y: -50, z: -10}
+    | }

@@ -1,7 +1,7 @@
 h1#examples An Example
 p
   | This section aims to give you a quick and dirty introduction to TPL
-  | and some of it's features via a few simple examples.
+  | and some of its features via a few simple examples.
 p
   | TPL code is JavaScript with a library of built-in functions which
   | allow you to generate tool paths.  It looks like this:
@@ -30,9 +30,8 @@ p
   | The previous example initializes the machine then cuts a square.
   | Note, you must always set the feed rate to something other than zero
   | before making a cut.  It's also a good idea to select a tool and
-  | set the spindle speed.  Also note thate, TPL uses metric units by
-  | default but you can switch to imperial units by calling
-  | <code>units(IMPERIAL)</code>.
+  | set the spindle speed.  Also note, TPL uses metric units by default.
+  | You can switch to imperial units by calling <code>units(IMPERIAL)</code>.
 p
   | Note, the bracket notation <code>{}</code> used above lets you
   | specify specific arguments and leave others to their default values.
@@ -81,7 +80,7 @@ pre: code.example
   | for (i = 1; i <= 10; i++) square(i * 5, -3, 5);
 
 p
-  | Here is the result of running the <code>squares</code> function as
+  | Here is the result of running the <code>square</code> function as
   | in the for loop above.
 
 img.sim-image(src="images/squares.png")
