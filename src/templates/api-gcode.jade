@@ -1,0 +1,22 @@
+// GCode Functions
+h2#gcode GCode
+#gcode.func
+  code.decl gcode(path)
+  p
+    | Include an external gcode file.
+    | Note that the contents are processed, not included raw,
+    | so unsupported commands or phrasings may be lost.
+
+  pre: code.example
+    | gcode("plugin.gcode");          // Include "plugin.gcode"
+
+#gexec.func
+  code.decl gexec(code)
+
+  p
+    | Includes a gcode string.
+    | Note that the contents are processed, not included raw,
+    | so unsupported commands or phrasings may be lost.
+
+  pre: code.example
+    | gexec("G0 X100 Y200");          // Add gcode command "G0 X100 Y200"

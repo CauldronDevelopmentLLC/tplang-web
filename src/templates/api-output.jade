@@ -14,6 +14,12 @@ h2#output Debugging
   pre: code.example print("Hello World!\n");
   pre: code.example print("(A gcode comment)\n");
 
+#position.func
+  code.decl position()
+  p
+    | Return a dict of the current positions, i.e. {x y z a b c u v w}.
+  pre: code.example print(position().x, position().y, position().z);
+
 #comment.func
   code.decl comment(...)
   p
